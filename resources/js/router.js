@@ -23,35 +23,6 @@ import Layout from './components/layout/Layout.vue';
 export const constantRouterMap = [
     { path: '/login', component: require('./components/login/Login.vue').default },
     { path: '/404', component: require('./components/errors/404.vue').default },
-
-    /*  {
-          path: '/',
-          component: Layout,
-          redirect: '/dashboard',
-          name: 'Dashboard',
-
-          children: [{
-              path: 'dashboard',
-              component: require('./components/layout/Layout.vue').default
-          }]
-      }*/
-
-
-    /*   { path: '/login', component: require('./components/login/Login.vue').default },
-       { path: '/404', component: require('./components/errors/404.vue').default},
-      // { path: '/', redirect:'/dashboard' },
-      // { path: '/dashboard', component: require('./components/dashboard/Dashboard.vue') },
-       {
-           path: '/',
-           component: require('./components/dashboard/Dashboard.vue').default,
-           redirect: '/dashboard',
-           name: 'Dashboard',
-           children: [{
-               path: 'dashboard',
-               component: require('./components/layout/Layout.vue').default
-           }]
-       } */
-
     {
         path: '/',
         component: Layout,
