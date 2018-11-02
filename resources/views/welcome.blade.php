@@ -11,6 +11,8 @@
 <body>
 <div id="app">
 </div>
+<!--<layout></layout>
+<dashboard></dashboard> -->
 <script>
     window.Laravel = <?php echo json_encode([
         'csrfToken' => csrf_token(),
