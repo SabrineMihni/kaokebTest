@@ -11,13 +11,12 @@ import axios from 'axios';
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
-import './../icons' // icon
+import './icons' // icon
 import App from './App.vue';
-import Example from './components/ExampleComponent.vue';
-import Layout from './components/layout/Layout.vue';
 import store from './store'
 import router from './router'
 import './../sass/index.scss' // global css
+
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);

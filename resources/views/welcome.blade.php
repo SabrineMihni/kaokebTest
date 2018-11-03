@@ -5,19 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="img/favicon.ico"/>
     <title>Laravel Vue CRUD Application</title>
     <link href="{{asset('css/index.css')}}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div id="app">
 </div>
-<!--<layout></layout>
-<dashboard></dashboard> -->
+
 <script>
     window.Laravel = <?php echo json_encode([
         'csrfToken' => csrf_token(),
     ]); ?>
+
+
 </script>
 <script src="{{asset('js/app.js')}}"></script>
 </body>
+<?php include_once("img/icons.svg"); ?>
 </html>
