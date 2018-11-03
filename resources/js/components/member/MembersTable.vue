@@ -63,10 +63,20 @@
         this.$emit('sortChange');
       },
       updateMember(member) {
-
+            this.$emit('openUpdate', member);
       },
       deleteMember(member) {
-
+          this.$store.dispatch(types.DELETE_MEMBER, member).then(
+              (res) => {
+                  this.close();
+                  this.$notify({
+                      title: 'Success!',
+                      message: 'Membre bien supprimé!',
+                      type: 'success',
+                      duration: 2000
+                  })
+              }
+          );
       },
         loadMembers() {
           this.$store.dispatch(types.LOAD_MEMBER_LIST).then(

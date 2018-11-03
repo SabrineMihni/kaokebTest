@@ -27,7 +27,7 @@
 
         <template v-if="type === 'member'">
             <br><br>
-            <members-table></members-table>
+            <members-table @openUpdate="(member) => updateMember(member)"></members-table>
         </template>
 
       <!--  <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" /> -->
@@ -36,8 +36,8 @@
 
         </el-dialog>
 
-        <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogMemberFomVisible">
-            <MemberForm :dialogStatus="dialogStatus" @close="dialogMemberFomVisible=false"></MemberForm>
+        <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogMemberFormVisible">
+            <MemberForm :dialogStatus="dialogStatus" :member="member" @close="dialogMemberFormVisible=false"></MemberForm>
         </el-dialog>
     </div>
 </template>
@@ -49,6 +49,7 @@
     import MeetingsTable from './../meeting/MeetingTable';
     import MemberForm from './../member/MemberForm';
     import MembersTable from "../member/MembersTable"; // Secondary package based on el-pagination
+    import * as types from './../../store/mutation-types';
 
     const calendarTypeOptions = [
         { key: 'CN', display_name: 'China' },
@@ -108,7 +109,7 @@
                     position: ''
                 },
                 dialogFormVisible: false,
-                dialogMemberFomVisible: false,
+                dialogMemberFormVisible: false,
                 dialogMeetingFormVisible: false,
                 dialogStatus: '',
                 textMap: {
@@ -164,65 +165,10 @@
                     }
                 })
             },
-            handleUpdate(row) {
-                this.temp = Object.assign({}, row) // copy obj
-                this.temp.timestamp = new Date(this.temp.timestamp)
-                this.dialogStatus = 'update'
-                this.dialogFormVisible = true
-                this.$nextTick(() => {
-                    this.$refs['dataForm'].clearValidate()
-                })
-            },
-            updateData() {
-                this.$refs['dataForm'].validate((valid) => {
-                    if (valid) {
-                        const tempData = Object.assign({}, this.temp)
-                        tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-                        updateArticle(tempData).then(() => {
-                            for (const v of this.list) {
-                                if (v.id === this.temp.id) {
-                                    const index = this.list.indexOf(v)
-                                    this.list.splice(index, 1, this.temp)
-                                    break
-                                }
-                            }
-                            this.dialogFormVisible = false
-                            this.$notify({
-                                title: '成功',
-                                message: '更新成功',
-                                type: 'success',
-                                duration: 2000
-                            })
-                        })
-                    }
-                })
-            },
-            handleDelete(row) {
-                this.$notify({
-                    title: '成功',
-                    message: '删除成功',
-                    type: 'success',
-                    duration: 2000
-                })
-                const index = this.list.indexOf(row)
-                this.list.splice(index, 1)
-            },
-            handleFetchPv(pv) {
-                fetchPv(pv).then(response => {
-                    this.pvData = response.data.pvData
-                    this.dialogPvVisible = true
-                })
-            },
-            getList() {
-                this.listLoading = true;
-                fetchList(this.listQuery).then(response => {
-                    this.list = response.data.items
-                    this.total = response.data.total
-                    // Just to simulate the time of the request
-                    setTimeout(() => {
-                        this.listLoading = false
-                    }, 1.5 * 1000)
-                })
+            updateMember(member) {
+                this.member = member;
+                this.dialogStatus = 'update';
+                this.dialogMemberFormVisible = true;
             }
         }
     }

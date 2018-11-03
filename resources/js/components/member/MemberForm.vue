@@ -29,16 +29,9 @@
 
     export default {
         name: "MemberForm",
-        props: ['dialogStatus'],
+        props: ['dialogStatus', 'member'],
         data() {
             return {
-                member: {
-                    first_name: '',
-                    last_name: '',
-                    email: '',
-                    phone: '',
-                    position: ''
-                },
                 rules: {
                     first_name: [{ required: true, message: 'Le prénom est obligatoire!', trigger: 'change' }],
                     last_name: [{ required: true, message: 'Le nom est obligatoire!', trigger: 'change' }],
@@ -52,7 +45,6 @@
                 this.$emit('close');
             },
             createData() {
-                console.log('hhh: ', this.member);
                 this.$refs['memberForm'].validate((valid) => {
                     if (valid) {
                         this.$store.dispatch(types.ADD_NEW_MEMBER, this.member).then(
@@ -66,8 +58,23 @@
                                 })
                             }
                         );
-
-
+                    }
+                });
+            },
+            updateData() {
+                this.$refs['memberForm'].validate((valid) => {
+                    if (valid) {
+                        this.$store.dispatch(types.UPDATE_MEMBER, this.member).then(
+                            (res) => {
+                                this.close();
+                                this.$notify({
+                                    title: 'Success!',
+                                    message: 'Membre bien modifié!',
+                                    type: 'success',
+                                    duration: 2000
+                                })
+                            }
+                        );
                     }
                 });
             }
