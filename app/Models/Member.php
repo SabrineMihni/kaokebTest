@@ -12,7 +12,7 @@ class Member extends Model
      * @var array
      */
     protected $fillable = [
-        'first_name', 'email', 'last_name'
+        'first_name', 'email', 'last_name', 'position', 'phone'
     ];
 
     /**

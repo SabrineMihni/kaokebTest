@@ -69,65 +69,30 @@ export const constantRouterMap = [
             }
         ]
     },
-
     {
-        path: '/nested',
+        path: '/member',
         component: Layout,
-        redirect: '/nested/menu1',
-        name: 'Nested',
-        meta: {
-            title: 'Nested',
-            icon: 'nested'
-        },
         children: [
             {
-                path: 'menu1',
-                component: require('./components/nested/menu1/index.vue'), // Parent router-view
-                name: 'Menu1',
-                meta: { title: 'Menu1' },
-                children: [
-                    {
-                        path: 'menu1-1',
-                        component: require('./components/nested/menu1/menu1-1/index.vue').default,
-                        name: 'Menu1-1',
-                        meta: { title: 'Menu1-1' }
-                    },
-                    {
-                        path: 'menu1-2',
-                        component: require('./components/nested/menu1/menu1-2/index.vue').default,
-                        name: 'Menu1-2',
-                        meta: { title: 'Menu1-2' },
-                        children: [
-                            {
-                                path: 'menu1-2-1',
-                                component: require('./components/nested/menu1/menu1-2/menu1-2-1/index.vue').default,
-                                name: 'Menu1-2-1',
-                                meta: { title: 'Menu1-2-1' }
-                            },
-                            {
-                                path: 'menu1-2-2',
-                                component: require('./components/nested/menu1/menu1-2/menu1-2-2/index.vue').default,
-                                name: 'Menu1-2-2',
-                                meta: { title: 'Menu1-2-2' }
-                            }
-                        ]
-                    },
-                    {
-                        path: 'menu1-3',
-                        component: require('./components/nested/menu1/menu1-3/index.vue').default,
-                        name: 'Menu1-3',
-                        meta: { title: 'Menu1-3' }
-                    }
-                ]
-            },
-            {
-                path: 'menu2',
-                component: require('./components/nested/menu2/index.vue').default,
-                meta: { title: 'menu2' }
+                path: 'index',
+                name: 'Member',
+                component: require('./components/member/Member.vue').default,
+                meta: { title: 'Membre d\'équipe', icon: 'form' }
             }
         ]
     },
-
+    {
+        path: '/meeting',
+        component: Layout,
+        children: [
+            {
+                path: 'index',
+                name: 'Meeting',
+                component: require('./components/meeting/Meeting.vue').default,
+                meta: { title: 'Entretien', icon: 'form' }
+            }
+        ]
+    },
     {
         path: 'external-link',
         component: Layout,

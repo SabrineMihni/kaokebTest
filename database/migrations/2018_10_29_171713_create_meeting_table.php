@@ -18,8 +18,8 @@ class CreateMeetingTable extends Migration
             $table->string('place');
             $table->string('subject');
             $table->string('synthesis')->nullable();
-            $table->timestamp('began_at');
-            $table->timestamp('finished_at');
+            $table->timestamp('began_at')->nullable();
+            $table->timestamp('finished_at')->nullable();
             $table->timestamps();
         });
     }

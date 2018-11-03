@@ -19,7 +19,7 @@ class CreateGroupMemberTable extends Migration
             $table->string('last_name');
             $table->string('email');
             $table->string('phone', 25)->nullable();
-            $this->string('position')->nullable();
+            $table->string('position')->nullable();
             $table->timestamps();
         });
     }
