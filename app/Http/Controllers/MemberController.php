@@ -36,7 +36,7 @@ class MemberController extends Controller
 
         $member->save();
 
-        return response()->json('Successfully added', 201);
+        return response()->json($member, 201);
 
     }
 
@@ -67,7 +67,7 @@ class MemberController extends Controller
         $member->position = $request->get('position');
         $member->save();
 
-        return response()->json('Successfully Updated', 200);
+        return response()->json($member, 200);
     }
 
     /**

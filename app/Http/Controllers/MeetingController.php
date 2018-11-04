@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MeetingResource;
 use App\Models\Meeting;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class MeetingController extends Controller
     public function index()
     {
         $meetings = Meeting::all();
-        return response()->json($meetings);
+        return response()->json(MeetingResource::collection($meetings));
     }
 
     /**
@@ -30,11 +31,16 @@ class MeetingController extends Controller
             'place' => $request->get('place'),
             'subject' => $request->get('subject'),
             'synthesis' => $request->get('subject'),
-            'began_at' => $request->get('began_at'),
-            'finished_at' => $request->get('finished_at')
+            'began_at' => date_format(new \DateTime($request->get('began_at')), 'Y-m-d H:i:s'),
+            'finished_at' => date_format(new \DateTime($request->get('finished_at')), 'Y-m-d H:i:s')
         ]);
         $meeting->save();
-        return response()->json('Successfully added', 201);
+        $members = $request->get('members');
+        if($members) {
+            $membersId = array_column($members, 'id');
+            $meeting->members()->sync(array_values($membersId));
+        }
+        return response()->json(new MeetingResource($meeting), 201);
     }
 
     /**
@@ -57,14 +63,20 @@ class MeetingController extends Controller
      */
     public function update(Request $request, Meeting $meeting)
     {
-        $meeting->place = $request->get('name');
+        $meeting->place = $request->get('place');
         $meeting->subject = $request->get('subject');
         $meeting->synthesis = $request->get('synthesis');
         $meeting->began_at = $request->get('began_at');
         $meeting->finished_at = $request->get('finished_at');
         $meeting->save();
 
-        return response()->json('Successfully Updated', 200);
+        $members = $request->get('members');
+        if($members) {
+            $membersId = array_column($members, 'id');
+            $meeting->members()->sync(array_values($membersId));
+        }
+
+        return response()->json(new MeetingResource($meeting), 200);
     }
 
     /**
@@ -74,6 +86,7 @@ class MeetingController extends Controller
      */
     public function destroy(Meeting $meeting)
     {
+        $meeting->members()->detach();
         $meeting->delete();
 
         return response()->json('Successfully Deleted', 204);
