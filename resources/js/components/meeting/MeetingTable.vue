@@ -1,7 +1,6 @@
 <template>
     <el-table
             v-loading="listLoading"
-            :key="tableKey"
             :data="list"
             border
             fit
@@ -13,39 +12,33 @@
                 <span>{{ scope.row.id }}</span>
             </template>
         </el-table-column>
-        <el-table-column label="Nom" width="150px" align="center">
+        <el-table-column label="Lieu" width="150px">
             <template slot-scope="scope">
-                <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+                <span>{{ scope.row.place}}</span>
             </template>
         </el-table-column>
-        <el-table-column label="Lieu" min-width="150px">
+        <el-table-column label="Sujet" width="200px" align="center">
             <template slot-scope="scope">
-                <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.title }}</span>
-                <el-tag>{{ scope.row.type | typeFilter }}</el-tag>
+                <span>{{ scope.row.subject }}</span>
             </template>
         </el-table-column>
-        <el-table-column label="Sujet" width="110px" align="center">
+        <el-table-column label="Synthèse" min-width="110px" align="center">
             <template slot-scope="scope">
-                <span>{{ scope.row.author }}</span>
+                <span>{{ scope.row.synthesis }}</span>
             </template>
         </el-table-column>
-        <el-table-column label="Synthèse" width="110px" align="center">
+        <el-table-column label="Date de début" width="150px" align="center">
             <template slot-scope="scope">
-                <span style="color:red;">{{ scope.row.reviewer }}</span>
+                <span v-if="scope.row.began_at">{{ scope.row.began_at | parseDateTime }}</span>
             </template>
         </el-table-column>
-        <el-table-column label="Date de début" width="110px" align="center">
+        <el-table-column label="Date de clôture" width="150px" align="center">
             <template slot-scope="scope">
-                <span style="color:red;">{{ scope.row.reviewer }}</span>
-            </template>
-        </el-table-column>
-        <el-table-column label="Date de clôture" width="110px" align="center">
-            <template slot-scope="scope">
-                <span style="color:red;">{{ scope.row.reviewer }}</span>
+                <span v-if="scope.row.finished_at">{{ scope.row.finished_at | parseDateTime }}</span>
             </template>
         </el-table-column>
 
-        <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+        <el-table-column label="Actions" align="center" width="280" class-name="small-padding fixed-width">
             <template slot-scope="scope">
                 <el-button type="primary" @click="updateMeeting(scope.row)">Modifier</el-button>
                 <el-button type="danger" @click="deleteMeeting(scope.row)">Supprimer</el-button>
@@ -55,18 +48,52 @@
 </template>
 
 <script>
+    import { parseTime } from './../../utils';
+    import * as types from './../../store/mutation-types';
+
     export default {
         name: "MeetingTable",
-        props: ['listLoading', 'tableKey', 'list'],
+        data() {
+            return {
+                listLoading: true,
+            }
+        },
+        mounted() {
+            this.loadMeetings();
+        },
+        filters: {
+            parseDateTime(status) {
+                return parseTime(status, '{y}-{m}-{d} {h}:{i}');
+            }
+        },
         methods: {
             sortChange() {
                 this.$emit('sortChange');
             },
             updateMeeting(meeting) {
-
+                this.$emit('openUpdate', meeting);
             },
             deleteMeeting(meeting) {
-
+                this.$store.dispatch(types.DELETE_MEETING, meeting).then(
+                    (res) => {
+                        this.$notify({
+                            title: 'Success!',
+                            message: 'Entretien bien supprimé!',
+                            type: 'success',
+                            duration: 2000
+                        })
+                    }
+                );
+            },
+            loadMeetings() {
+                this.$store.dispatch(types.LOAD_MEETING_LIST).then(
+                    (res) => this.listLoading = false
+                );
+            }
+        },
+        computed: {
+            list() {
+                return this.$store.state.meeting.meetingsList;
             }
         }
     }

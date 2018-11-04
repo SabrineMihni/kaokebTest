@@ -34,41 +34,6 @@ export const constantRouterMap = [
             component: require('./components/dashboard/Dashboard.vue').default
         }]
     },
-
-    {
-        path: '/example',
-        component: Layout,
-        redirect: '/example/table',
-        name: 'Example',
-        meta: { title: 'Example', icon: 'example' },
-        children: [
-            {
-                path: 'table',
-                name: 'Table',
-                component: require('./components/table/index.vue').default,
-                meta: { title: 'Table', icon: 'table' }
-            },
-            {
-                path: 'tree',
-                name: 'Tree',
-                component: require('./components/tree/index.vue').default,
-                meta: { title: 'Tree', icon: 'tree' }
-            }
-        ]
-    },
-
-    {
-        path: '/form',
-        component: Layout,
-        children: [
-            {
-                path: 'index',
-                name: 'Form',
-                component: require('./components/form/index.vue').default,
-                meta: { title: 'Form', icon: 'form' }
-            }
-        ]
-    },
     {
         path: '/member',
         component: Layout,
@@ -90,16 +55,6 @@ export const constantRouterMap = [
                 name: 'Meeting',
                 component: require('./components/meeting/Meeting.vue').default,
                 meta: { title: 'Entretien', icon: 'form' }
-            }
-        ]
-    },
-    {
-        path: 'external-link',
-        component: Layout,
-        children: [
-            {
-                path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-                meta: { title: 'External Link', icon: 'link' }
             }
         ]
     },

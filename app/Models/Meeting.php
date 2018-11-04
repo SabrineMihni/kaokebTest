@@ -12,7 +12,7 @@ class Meeting extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'place', 'subject', 'synthesis','began_at', 'finished_at'
     ];
 
     /**
@@ -20,6 +20,6 @@ class Meeting extends Model
      */
     public function members()
     {
-        return $this->belongsToMany('App\Models\Member');
+        return $this->belongsToMany('App\Models\Member', 'meeting_member');
     }
 }

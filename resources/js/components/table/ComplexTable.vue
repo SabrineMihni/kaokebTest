@@ -12,17 +12,17 @@
                 <el-input placeholder="Sujet" v-model="listQuery.last_name" style="width: 200px;" class="filter-item" @keyup.enter.native=""/>
             </template>
 
-            <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="">
+            <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="NotYet()">
                 <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key"/>
             </el-select>
 
-            <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="">Chercher</el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">Ajouter</el-button>
-            <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="">Exporter</el-button>
+            <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="NotYet()">Chercher</el-button>
+            <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate()">Ajouter</el-button>
+            <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="NotYet()">Exporter</el-button>
         </div>
         <template v-if="type === 'meeting'">
             <br><br>
-            <MeetingsTable :listLoading="listLoading" :tableKey="tableKey" :list="list" @sort-change="sortChange"></MeetingsTable>
+            <MeetingsTable @openUpdate="(meeting) => updateMeeting(meeting)"></MeetingsTable>
         </template>
 
         <template v-if="type === 'member'">
@@ -33,7 +33,7 @@
       <!--  <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" /> -->
 
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogMeetingFormVisible">
-
+            <meeting-form :dialogStatus="dialogStatus" :meeting="meeting" @close="dialogMeetingFormVisible=false"></meeting-form>
         </el-dialog>
 
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogMemberFormVisible">
@@ -48,8 +48,8 @@
     import Pagination from './../Pagination';
     import MeetingsTable from './../meeting/MeetingTable';
     import MemberForm from './../member/MemberForm';
-    import MembersTable from "../member/MembersTable"; // Secondary package based on el-pagination
-    import * as types from './../../store/mutation-types';
+    import MembersTable from "../member/MembersTable";
+    import MeetingForm from "../meeting/MeetingForm"; // Secondary package based on el-pagination
 
     const calendarTypeOptions = [
         { key: 'CN', display_name: 'China' },
@@ -67,7 +67,7 @@
     export default {
         name: 'ComplexTable',
         props: ['type'],
-        components: {MembersTable, MemberForm, MeetingsTable, Pagination },
+        components: {MeetingForm, MembersTable, MemberForm, MeetingsTable, Pagination },
         directives: { waves },
         filters: {
             statusFilter(status) {
@@ -108,20 +108,20 @@
                     phone: '',
                     position: ''
                 },
-                dialogFormVisible: false,
+                meeting: {
+                    place: '',
+                    subject: '',
+                    synthesis: '',
+                    began_at: new Date(),
+                    finished_at: new Date(),
+                    members: []
+                },
                 dialogMemberFormVisible: false,
                 dialogMeetingFormVisible: false,
                 dialogStatus: '',
                 textMap: {
                     update: 'Modifier',
                     create: 'Créer'
-                },
-                dialogPvVisible: false,
-                pvData: [],
-                rules: {
-                    type: [{ required: true, message: 'type is required', trigger: 'change' }],
-                    timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-                    title: [{ required: true, message: 'title is required', trigger: 'blur' }]
                 },
                 downloadLoading: false
             }
@@ -138,37 +138,46 @@
                     position: ''
                 }
             },
+            resetMeetingTemp() {
+                this.meeting = {
+                    place: '',
+                    subject: '',
+                    synthesis: '',
+                    began_at: null,
+                    finished_at: null,
+                    members: []
+                }
+            },
             handleCreate() {
-
                 if(this.type === 'member') {
                     this.resetMemberTemp();
                     this.dialogStatus = 'create';
-                    this.dialogMemberFomVisible = true;
+                    this.dialogMemberFormVisible = true;
+                }
+                if(this.type === 'meeting') {
+                    this.resetMeetingTemp();
+                    this.dialogStatus = 'create';
+                    this.dialogMeetingFormVisible = true;
                 }
 
-            },
-            createData() {
-                this.$refs['memberForm'].validate((valid) => {
-                    if (valid) {
-                        this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-                        this.temp.author = 'vue-element-admin'
-                        createArticle(this.temp).then(() => {
-                            this.list.unshift(this.temp)
-                            this.dialogFormVisible = false
-                            this.$notify({
-                                title: '成功',
-                                message: '创建成功',
-                                type: 'success',
-                                duration: 2000
-                            })
-                        })
-                    }
-                })
             },
             updateMember(member) {
                 this.member = member;
                 this.dialogStatus = 'update';
                 this.dialogMemberFormVisible = true;
+            },
+            NotYet() {
+                this.$notify({
+                    title: 'Warning',
+                    message: 'Cette fonctionnalité n\'est pas encore prise en compte!',
+                    type: 'warning',
+                    duration: 2000
+                })
+            },
+            updateMeeting(meeting) {
+                this.meeting = meeting;
+                this.dialogStatus = 'update';
+                this.dialogMeetingFormVisible = true;
             }
         }
     }

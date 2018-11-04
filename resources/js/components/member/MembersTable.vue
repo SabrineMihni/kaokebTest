@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import { parseTime } from './../../utils';
+
   import * as types from './../../store/mutation-types';
 
   export default {
@@ -68,7 +68,6 @@
       deleteMember(member) {
           this.$store.dispatch(types.DELETE_MEMBER, member).then(
               (res) => {
-                  this.close();
                   this.$notify({
                       title: 'Success!',
                       message: 'Membre bien supprimé!',

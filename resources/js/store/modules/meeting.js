@@ -1,10 +1,10 @@
 import * as types from './../mutation-types'
 
-const API_URL = '/api/members';
+const API_URL = '/api/meetings';
 
 
 const state = {
-    membersList: []
+    meetingsList: []
 };
 
 const getters = {
@@ -13,33 +13,33 @@ const getters = {
 
 const actions = {
 
-    [types.LOAD_CLIENT_STATUS_LIST] ({ commit }) {
+    [types.LOAD_MEETING_LIST] ({ commit }) {
         axios.get(API_URL).then((response) => {
-            commit(types.SET_CLIENT_STATUS_LIST, { list: response.data.data })
+            commit(types.SET_MEETING_LIST_LOCAL, { list: response.data })
         }, (err) => {
             console.log(err)
         })
     },
 
-    [types.ADD_NEW_CLIENT_STATUS] ({ commit, state }, clientStatus) {
-        axios.post(API_URL+'/', clientStatus).then( (response) => {
-            commit( types.ADD_CLIENT_STATUS, { clientStatus })
+    [types.ADD_NEW_MEETING] ({ commit, state }, meeting) {
+        axios.post(API_URL+'/', meeting).then( (response) => {
+            commit( types.ADD_MEETING_LOCAL, { meeting: response.data })
         }, (err) => {
             console.log(err)
         })
     },
 
-    [types.UPDATE_CLIENT_STATUS] ({ commit, state },  clientStatus ) {
-        axios.put(API_URL + '/' + clientStatus.id, clientStatus).then( (response) => {
-            commit(types.UPDATE_CURRENT_CLIENT_STATUS, { clientStatus: response.data })
+    [types.UPDATE_MEETING] ({ commit, state },  meeting ) {
+        axios.put(API_URL + '/' + meeting.id, meeting).then( (response) => {
+            commit(types.UPDATE_MEETING_LOCAL, { meeting: response.data })
         }, (err) => {
             console.log(err)
         })
     },
 
-    [types.DELETE_CLIENT_STATUS] ({ commit, state }, clientStatus ) {
-        axios.delete(API_URL + '/' + clientStatus.id).then( (response) => {
-                commit(types.DELETE_CURRENT_CLIENT_STATUS, { clientStatus });
+    [types.DELETE_MEETING] ({ commit, state }, meeting ) {
+        axios.delete(API_URL + '/' + meeting.id).then( (response) => {
+                commit(types.DELETE_MEETING_LOCAL, { meeting });
             }, (err) => {
                 console.log(err)
             }
@@ -49,22 +49,22 @@ const actions = {
 
 const mutations = {
 
-    [types.SET_CLIENT_STATUS_LIST] (state, { list }) {
-        state.clientStatusList = list
+    [types.SET_MEETING_LIST_LOCAL] (state, { list }) {
+        state.meetingsList = list
     },
 
-    [types.ADD_CLIENT_STATUS] (state, { clientStatus }) {
-        state.clientStatusList.push(clientStatus)
+    [types.ADD_MEETING_LOCAL] (state, { meeting }) {
+        state.meetingsList.push(meeting)
     },
 
-    [types.UPDATE_CURRENT_CLIENT_STATUS] (state, { clientStatus }) {
-        let idx = state.clientStatusList.map(cs => cs.id).indexOf(clientStatus.id)
-        state.clientStatusList.splice(idx, 1, clientStatus)
+    [types.UPDATE_MEETING_LOCAL] (state, { meeting }) {
+        let idx = state.meetingsList.map(cs => cs.id).indexOf(meeting.id)
+        state.meetingsList.splice(idx, 1, meeting)
     },
 
-    [types.DELETE_CURRENT_CLIENT_STATUS] (state, { clientStatus }) {
-        let idx = state.clientStatusList.map(cs => cs.id).indexOf(clientStatus.id)
-        state.clientStatusList.splice(idx, 1)
+    [types.DELETE_MEETING_LOCAL] (state, { meeting }) {
+        let idx = state.meetingsList.map(cs => cs.id).indexOf(meeting.id)
+        state.meetingsList.splice(idx, 1)
     }
 };
 
