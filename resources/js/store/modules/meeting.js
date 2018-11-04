@@ -54,7 +54,7 @@ const mutations = {
     },
 
     [types.ADD_MEETING_LOCAL] (state, { meeting }) {
-        state.meetingsList.push(meeting)
+        state.meetingsList.unshift(meeting)
     },
 
     [types.UPDATE_MEETING_LOCAL] (state, { meeting }) {

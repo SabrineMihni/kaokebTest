@@ -43,7 +43,6 @@
 </template>
 
 <script>
-    import { fetchList, fetchPv, createArticle, updateArticle } from './../../store/api/article';
     import waves from './../directives/waves'; // Waves directive
     import Pagination from './../Pagination';
     import MeetingsTable from './../meeting/MeetingTable';
